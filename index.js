@@ -1,27 +1,31 @@
-//❗❗ PLEASE READ THE README file for project instructions, helpful resources, additional tasks and stretch problems, and more ❗❗ 
+//❗❗ PLEASE READ THE README file for project instructions, helpful resources, additional tasks and stretch problems, and more ❗❗
 
 // ⭐️ Example Challenge START ⭐️
 
 /**Example Task : processFirstItem()
  * This example shows how you might go about solving the rest of the tasks
- * 
+ *
  * Use the higher order function processFirstItem below to do the following:
  *  1. Receive an array of strings in a parameter
  *  2. Receive a callback function that takes a string as its argument in a parameter
- *  3. Return the result of invoking the callback function and passing in the FIRST 
+ *  3. Return the result of invoking the callback function and passing in the FIRST
  *     element in the array as the argument
- * 
+ *
  * The following code is demonstrating a way of completing this task
  * It returns the string `foofoo`
-*/
+ */
 
 function processFirstItem(stringList, callback) {
-  return callback(stringList[0])
+  return callback(stringList[0]);
 }
-console.log('example task:', processFirstItem(['foo','bar'],function(str){return str+str}));
+console.log(
+  "example task:",
+  processFirstItem(["foo", "bar"], function (str) {
+    return str + str;
+  })
+);
 
 // ⭐️ Example Challenge END ⭐️
-
 
 ///// M V P ///////
 
@@ -30,7 +34,7 @@ console.log('example task:', processFirstItem(['foo','bar'],function(str){return
   Study the code for counter1 and counter2, then answer the questions below.
   
   1. What is the difference between counter1 and counter2?
-  
+  //
   2. Which of the two uses a closure? How can you tell?
   
   3. In what scenario would the counter1 code be preferable? In what scenario would 
@@ -41,8 +45,8 @@ console.log('example task:', processFirstItem(['foo','bar'],function(str){return
 function counterMaker() {
   let count = 0;
   return function counter() {
-   return count++;
-  }
+    return count++;
+  };
 }
 
 const counter1 = counterMaker();
@@ -54,7 +58,6 @@ function counter2() {
   return count++;
 }
 
-
 /* ⚾️⚾️⚾️ Task 2: inning() ⚾️⚾️⚾️
 Use the inning function below to do the following:
   1. Return a random whole number of points between 0 and 2 scored by one team in an inning
@@ -64,10 +67,9 @@ Use the inning function below to do the following:
 NOTE: This will be a callback function for the tasks below
 */
 
-function inning(/*Code Here*/){
-    /*Code Here*/
+function inning() {
+  return Math.floor(Math.random() * 3);
 }
-
 
 /* ⚾️⚾️⚾️ Task 3: finalScore() ⚾️⚾️⚾️
 Use the finalScore function below to do the following:
@@ -81,12 +83,23 @@ Use the finalScore function below to do the following:
   "Home": 11,
   "Away": 5
 }
-*/ 
+*/
 
-function finalScore(/*Code Here*/){
-  /*Code Here*/
+function finalScore(inningCB, innings) {
+  const totalScore = {
+    Home: 0,
+    Away: 0,
+  };
+
+  for (let i = 0; i < innings; i++) {
+    totalScore.Home += inningCB();
+    totalScore.Away += inningCB();
+  }
+
+  return totalScore;
 }
 
+console.log("task 3", finalScore(inning, 9));
 
 /* ⚾️⚾️⚾️ Task 4: getInningScore() ⚾️⚾️⚾️
 Use the getInningScore() function below to do the following:
@@ -100,12 +113,14 @@ For example: invoking getInningScore(inning) might return this object:
 }
   */
 
-
-function getInningScore(/*Your Code Here */) {
-  /*Your Code Here */
-
+function getInningScore(inningCB) {
+  return {
+    Home: inningCB(),
+    Away: inningCB(),
+  };
 }
 
+console.log("task 4", getInningScore(inning));
 
 /* STRETCH: ⚾️⚾️⚾️ Task 5: scoreboard() ⚾️⚾️⚾️
 Use the scoreboard function below to do the following:
@@ -147,17 +162,43 @@ Use the scoreboard function below to do the following:
   "This game will require extra innings: Away 10 - Home 10"
 ] */
 // NOTE: There is no test associated with this code; if your output matches the given example, consider it complete!
-function scoreboard(/* CODE HERE */) {
-  /* CODE HERE */
+function scoreboard(getInningScoreCB, inningCB, innings) {
+  const totalGame = [];
+
+  let homeTotalScore = 0;
+  let awayTotalScore = 0;
+
+  for (let i = 0; i < innings; i++) {
+    let homeInningScore = getInningScoreCB(inningCB).Home;
+    let awayInningScore = getInningScoreCB(inningCB).Away;
+
+    homeTotalScore += homeInningScore;
+    awayTotalScore += awayInningScore;
+
+    totalGame.push(
+      `Inning ${i + 1}: Away ${awayInningScore} - Home ${homeInningScore}`
+    );
+  }
+
+  if (awayTotalScore === homeTotalScore) {
+    totalGame.push(
+      `This game will require extra innings: Away ${awayTotalScore} - Home ${homeTotalScore}`
+    );
+  } else {
+    totalGame.push(
+      `Final Score: Away ${awayTotalScore} - Home ${homeTotalScore}`
+    );
+  }
+
+  return totalGame;
 }
 
-
-
+console.log("stretch", scoreboard(getInningScore, inning, 9));
 
 /* 🛑🛑🛑🛑🛑 Please do not modify anything below this line 🛑🛑🛑🛑🛑 */
-function foo(){
-  console.log('its working');
-  return 'bar';
+function foo() {
+  console.log("its working");
+  return "bar";
 }
 foo();
 module.exports = {
@@ -169,4 +210,4 @@ module.exports = {
   finalScore,
   getInningScore,
   scoreboard,
-}
+};
